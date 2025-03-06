@@ -6,8 +6,7 @@ import { Text } from './Text';
 import { UseProfile } from './UseProfile';
 import { User } from './types/user';
 import { UserCard } from './components/UserCard';
-import { UserProfile } from './types/userProfiles';
-import { AxiosUser } from './types/axiosUser';
+import { useAllUsers } from './hooks/useAllUsers';
 
 const user: User = {
   name: "hoge",
@@ -17,7 +16,6 @@ const user: User = {
 
 export default function App1 () {
   const [todos, setTodos] = useState<Array<TodoType>>([]);
-  
 
   const onClickFetchData = () => {
     axios.get<Array<TodoType>>("https://jsonplaceholder.typicode.com/todos").then((res) => {
@@ -25,26 +23,9 @@ export default function App1 () {
     });
   }
 
-  const onClickFetchUserData = () => {
-    setLoading(true);
-    setError(false);
+  const { getUsers, userProfiles, loading, error } = useAllUsers(); // カスタムフックから取り出す関数、state
 
-    axios.get<Array<AxiosUser>>("https://jsonplaceholder.typicode.com/users").then((res) => {
-      const data = res.data.map((user) => ({ // axiosで取得した全部の値じゃなく、必要な値だけを取り出す
-        id: user.id,
-        name: `${user.name}(${user.username})`,
-        email: user.email,
-        address: `${user.address.city}${user.address.suite}${user.address.street}`
-      }))
-      setUserProfiles(data);
-    })
-    .catch(()=> {
-      setError(true);
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-  };
+  const onClickFetchUserData = () => getUsers(); // クリックするとカスタムフックの処理が実行される
 
   return (
     <div className="App">
@@ -71,3 +52,8 @@ export default function App1 () {
     </div>
   );
 }
+
+// カスタムフックをコンポーネント側から呼び出すと、それぞれ関数やstateを受け取ることでコンポーネント側でそれらを使うことでできる。
+// カスタムフックで呼び出したstateはそれぞれのコンポーネントで独立になるので、
+// このコンポーネント以外で同じカスタムフックを使用しても、コンポーネント間でstateが競合することはない。
+// なので便利な純粋な処理とstateを提供するものとなる。

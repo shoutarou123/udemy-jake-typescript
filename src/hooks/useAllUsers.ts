@@ -32,7 +32,7 @@ export const useAllUsers = () => {
   };
   
   // stateの情報とgetUsersを他のコンポーネントから使えるようにreturnで返していってあげる。カスタムフックでretrunで返す方法は配列で返す方法とオブジェクトで返す方法と2通りある。
-  return  {getUsers, userProfiles, loading, error }  
+  return  { getUsers, userProfiles, loading, error }  
 };
 
 // トリガーとなるgetUsersという関数。この中でaxiosを呼んで、データを取得して、stateを更新していくような処理を書くことで、
