@@ -17,9 +17,7 @@ const user: User = {
 
 export default function App1 () {
   const [todos, setTodos] = useState<Array<TodoType>>([]);
-  const [userProfiles, setUserProfiles] = useState<Array<UserProfile>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  
 
   const onClickFetchData = () => {
     axios.get<Array<TodoType>>("https://jsonplaceholder.typicode.com/todos").then((res) => {
